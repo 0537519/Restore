@@ -9,9 +9,17 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task <ActionResult<List<Product>>> GetProducts()
+        public async Task <ActionResult<List<Product>>> GetProducts(string orderBy)
         {
-            return await context.Products.ToListAsync();
+            var query=context.Products.AsQueryable();
+
+            query = orderBy switch
+            {
+                "price"=>query.OrderBy(x=>x.Price),
+                "priceDesc"=>query.OrderByDescending(x=>x.Price),
+                _=>query.OrderBy(x=>x.Name)
+            };
+            return await query.ToListAsync();
         }
 
        [HttpGet("{id}")] //api/products/2
