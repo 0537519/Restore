@@ -41,5 +41,5 @@ export const catalogSlice=createSlice({
         }
     }
 });
-export const{setBrands,setOrderBy,setPageNumber,setPageSize,setSearchTerm,setTypes}
+export const{setBrands,setOrderBy,setPageNumber,setPageSize,setSearchTerm,setTypes,resetParams}
   =catalogSlice.actions;
