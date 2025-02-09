@@ -6,6 +6,7 @@ import { setDarkMode } from "./uiSlice";
 import { Link } from "react-router-dom";
 import { useFetchBasketQuery } from "../../features/basket/basketApi";
 import UserMenu from "./UserMenu";
+import { useUserInfoQuery } from "../../features/account/accountApi";
 
 const midLinks=[
     {title:'catalog',path:'/catalog'},
@@ -31,7 +32,7 @@ const navStyle={
 }
 
 export default function NavBar() {
-  const user={email:'test@test.com',roles:[]} 
+  const {data:user}=useUserInfoQuery();
   const{isLoading,darkMode}=useAppSelector(state=>state.ui);
   const dispatch =useAppDispatch(); 
   const {data:basket} =useFetchBasketQuery();
