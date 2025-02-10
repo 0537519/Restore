@@ -24,6 +24,7 @@ export const accountApi =createApi({
                     dispatch(accountApi.util.invalidateTags(['UserInfo']))
                 }catch(error){
                     console.log(error);
+                    throw error;
                 }
             }
         }),
@@ -63,4 +64,5 @@ export const accountApi =createApi({
     })
 });
 
-export const {useLoginMutation,useRegisterMutation,useLogoutMutation,useUserInfoQuery}=accountApi;
+export const {useLoginMutation,useRegisterMutation,useLogoutMutation,
+       useUserInfoQuery,useLazyUserInfoQuery}=accountApi;

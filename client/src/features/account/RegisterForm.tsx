@@ -8,13 +8,28 @@ import { Link } from "react-router-dom";
 
 export default function RegisterForm() {
     const [registerUser]=useRegisterMutation();
-    const {register,handleSubmit,formState:{errors,isValid,isLoading}}=useForm<RegisterSchema>({
+    const {register,handleSubmit,setError,formState:{errors,isValid,isLoading}}=useForm<RegisterSchema>({
         mode:'onTouched',
         resolver:zodResolver(registerSchema)
     })
 
     const onSubmit=async(data:RegisterSchema)=>{
-        await registerUser(data);
+        try {
+            await registerUser(data).unwrap();
+        } catch (error) {
+            const apiError=error as {message:string};
+            if(apiError.message&& typeof apiError.message==='string'){
+                const errorArray=apiError.message.split(',');
+                errorArray.forEach(e=>{
+                    if(e.includes('Password')){
+                        setError('password',{message:e})
+                    }else if(e.includes('Email')){
+                        setError('email',{message:e})
+                    }
+                })
+            }
+        }
+        
     }
 
   return (
