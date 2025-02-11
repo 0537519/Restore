@@ -2,12 +2,16 @@ import { Box, Button, Checkbox, FormControlLabel, Paper, Step, StepLabel, Steppe
 import { AddressElement, PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react"
 import Review from "./Review";
+import { useFetchAddressQuery } from "../account/accountApi";
+import { Address } from "../../app/models/user";
 
 const steps=['Address','Payment','Review']
 
 export default function CheckoutStepper() {
 
     const [activeStep,setActiveStep]=useState(0);
+    const {data:{name, ...restAdress}={} as Address}=useFetchAddressQuery();
+
     const handleNext=()=>{
         setActiveStep(step=>step+1);
     }
@@ -29,7 +33,11 @@ export default function CheckoutStepper() {
             <Box sx={{display:activeStep===0 ? 'block':'none'}}>
                 <AddressElement
                   options={{
-                    mode:'shipping'
+                    mode:'shipping',
+                    defaultValues:{
+                        name:name,
+                        address:restAdress
+                    }
                   }}
                 />
                 <FormControlLabel
