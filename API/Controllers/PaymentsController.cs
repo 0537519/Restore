@@ -26,10 +26,14 @@ public class PaymentsController(PaymentsService paymentsService, StoreContext co
         basket.PaymentIntentId ??=intent.Id;
         basket.ClientSecret ??=intent.ClientSecret;
 
-        var result =await context.SaveChangesAsync()>0;
+        if(context.ChangeTracker.HasChanges())
+        {
+            var result =await context.SaveChangesAsync()>0;
 
-        if(!result) return BadRequest("Problem updating baskte with intent");
+            if(!result) return BadRequest("Problem updating baskte with intent");
 
+        }
+        
         return basket.ToDto();
     }
 }
