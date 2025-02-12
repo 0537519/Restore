@@ -13,19 +13,20 @@ namespace API.Controllers;
 public class OrdersController(StoreContext context):BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<List<Order>>> GetOrder()
+    public async Task<ActionResult<List<OrderDto>>> GetOrder()
     {
         var orders=await context.Orders
-           .Include(x=>x.OrderItems)
+           .ProjectToDto()
            .Where(x=>x.BuyerEmail==User.GetUsername())
            .ToListAsync();
         return orders;
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Order>> GetOrderDetails(int id)
+    public async Task<ActionResult<OrderDto>> GetOrderDetails(int id)
     {
         var order=await context.Orders
+           .ProjectToDto()
            .Where(x=>x.BuyerEmail==User.GetUsername() && id ==x.Id)
            .FirstOrDefaultAsync();
         if(order==null) return NotFound();
@@ -63,7 +64,7 @@ public class OrdersController(StoreContext context):BaseApiController
 
         if(!result) return BadRequest("Problem creating order");
 
-        return CreatedAtAction(nameof(GetOrderDetails),new{id=order.Id},order);
+        return CreatedAtAction(nameof(GetOrderDetails),new{id=order.Id},order.ToDto());
         
     }
 
