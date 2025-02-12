@@ -12,7 +12,7 @@ public class Order
     public long Subtotal { get; set; }
     public long DeliveryFee { get; set; }
     public long Discout { get; set; }
-    public string? PaymentIntentId { get; set; }
+    public required string PaymentIntentId { get; set; }
     public OrderStatus OrderStatus { get; set; }=OrderStatus.Pending;
     public required PaymentSummary PaymentSummary { get; set; }
 
