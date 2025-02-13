@@ -31,6 +31,9 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors(opt=>
 {
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:3000");
@@ -41,6 +44,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<User>();
+app.MapFallbackToController("Index","Fallback");
 
 DbInitializer.InitDb(app);
 
